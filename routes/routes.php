@@ -10,16 +10,18 @@
         $idTipoRuta = array_search('citas', $uri);
     } else if (in_array('pacientes', $uri, true)) {
         $idTipoRuta = array_search('pacientes', $uri);
-    } else if (in_array('usuarios', $uri)) {
+    } else if (in_array('usuarios', $uri, true)) {
         $idTipoRuta = array_search('usuarios', $uri);
     } else {
         http_response_code(400);
-        json_encode(['message' => "Ruta no valida"]);
+        echo json_encode(['message' => "Ruta no valida"]);
+        exit;
     }
 
     if ($idTipoRuta === false) {
         http_response_code(400);
-        json_encode(['message' => "Ruta no encontrada"]);
+        echo json_encode(['message' => "Ruta no encontrada"]);
+        exit;
     }
 
     $tipoRuta = $uri[$idTipoRuta];
@@ -50,9 +52,10 @@
             case 'PUT':
                 if (!$id) {
                     http_response_code(400);
-                    json_encode(['message' => "ID requerido"]);
+                    echo json_encode(['message' => "ID requerido"]);
+                    exit;
                 } else {
-                    $data = json_decode(file_get_contents("php://input", true));
+                    $data = json_decode(file_get_contents("php://input"), true);
                     $controller->updateCitaController(
                         $id,
                         $data['PacienteId'],
@@ -67,14 +70,15 @@
             case 'DELETE':
                 if (!$id) {
                     http_response_code(400);
-                    json_encode(['message' => "ID requerido"]);
+                    echo json_encode(['message' => "ID requerido"]);
+                    exit;
                 } else {
                     $controller->deleteCitaController($id);
                     break;
                 }
             default:
                 http_response_code(400);
-                json_encode(['message' => "Metodo no valido"]);
+                echo json_encode(['message' => "Metodo no valido"]);
                 break;
         }
     } else if ($tipoRuta === 'pacientes') {
@@ -103,7 +107,8 @@
             case 'PUT':
                 if (!$id) {
                     http_response_code(400);
-                    json_encode(['message' => "ID requerido"]);
+                    echo json_encode(['message' => "ID requerido"]);
+                    exit;
                 }
                 $data = json_decode(file_get_contents("php://input"), true);
                 $controller->updatePacienteController(
@@ -121,13 +126,14 @@
             case 'DELETE':
                 if (!$id) {
                     http_response_code(400);
-                    json_encode(['message' => "ID requerido"]);
+                    echo json_encode(['message' => "ID requerido"]);
+                    exit;
                 }
                 $controller->deletePacienteController($id);
                 break;
             default:
                 http_response_code(400);
-                json_encode(['message' => "Metodo no permitido"]);
+                echo json_encode(['message' => "Metodo no permitido"]);
                 break;
         }
     } else if ($tipoRuta === 'usuarios') {
@@ -151,7 +157,8 @@
             case 'PUT':
                 if (!$id) {
                     http_response_code(400);
-                    json_encode(['message' => "ID requerido"]);
+                    echo json_encode(['message' => "ID requerido"]);
+                    exit;
                 }
                 $data = json_decode(file_get_contents("php://input"), true);
                 $controller->updateUsuarioController(
@@ -164,13 +171,14 @@
             case 'DELETE':
                 if (!$id) {
                     http_response_code(400);
-                    json_encode(['message' => "ID requerido"]);
+                    echo json_encode(['message' => "ID requerido"]);
+                    exit;
                 }
                 $controller->deleteUsuarioController($id);
                 break;
             default:
                 http_response_code(400);
-                json_encode(['message' => "Metodo no permitido"]);
+                echo json_encode(['message' => "Metodo no permitido"]);
                 break;
         }
     }
